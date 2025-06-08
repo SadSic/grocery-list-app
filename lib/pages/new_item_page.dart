@@ -1,5 +1,6 @@
-import 'dart:ffi';
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/category.dart';
@@ -22,12 +23,34 @@ class _NewItemPageState extends State<NewItemPage> {
     _formKey.currentState!.reset();
   }
 
-  void _addNewItem() {
+  void _addNewItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      final url = Uri.https('grocerylistapp-6ebd0-default-rtdb.firebaseio.com',
+          'shopping-list.json');
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(
+          {
+            'name': _enteredName,
+            'quantity': _enteredQuantity,
+            'category': _selectedCategory.name,
+          },
+        ),
+      );
+
+      if (!context.mounted) {
+        return;
+      }
+
+      final responseData = json.decode(response.body);
+
       Navigator.of(context).pop(
         GroceryItem(
-          id: DateTime.now().toString(),
+          id: responseData['name'],
           name: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory,
