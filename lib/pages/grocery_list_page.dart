@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping_list/data/categories.dart';
 import 'package:shopping_list/models/grocery_item.dart';
+import 'package:shopping_list/pages/edit_item_page.dart';
 import 'package:shopping_list/pages/new_item_page.dart';
 
 class GroceryList extends StatefulWidget {
@@ -107,6 +108,27 @@ class _GroceryListState extends State<GroceryList> {
     );
   }
 
+  void _updateItem(GroceryItem item) async {
+    final updatedItem = await Navigator.of(context).push<GroceryItem>(
+      MaterialPageRoute(
+        builder: (context) => EditItemPage(
+          oldItem: item,
+        ),
+      ),
+    );
+
+    if (updatedItem == null) {
+      return;
+    }
+
+    final index = _groceryItems.indexWhere((i) => i.id == item.id);
+    if (index >= 0) {
+      setState(() {
+        _groceryItems[index] = updatedItem;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget content = const Center(
@@ -135,10 +157,6 @@ class _GroceryListState extends State<GroceryList> {
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 255, 255, 255),
                     borderRadius: BorderRadius.circular(20.0),
-                    // border: Border.all(
-                    //   color: Color(0xffe5c185),
-                    //   width: 6.0,
-                    // ),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.25),
@@ -163,12 +181,27 @@ class _GroceryListState extends State<GroceryList> {
                       color: item.category.color,
                       size: 28,
                     ),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.delete_forever,
-                        color: Color.fromARGB(255, 245, 84, 56),
+                    trailing: Container(
+                      width: 100,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Color.fromARGB(255, 123, 123, 123),
+                            ),
+                            onPressed: () => _updateItem(item),
+                          ),
+                          IconButton(
+                            icon: const Icon(
+                              Icons.delete_forever,
+                              color: Color.fromARGB(255, 245, 84, 56),
+                            ),
+                            onPressed: () => _removeItem(item),
+                          ),
+                        ],
                       ),
-                      onPressed: () => _removeItem(item),
                     ),
                   ),
                 ),
@@ -192,11 +225,18 @@ class _GroceryListState extends State<GroceryList> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(FontAwesomeIcons.bagShopping, color: Colors.white,),
+            Icon(
+              FontAwesomeIcons.bagShopping,
+              color: Colors.white,
+            ),
             const SizedBox(width: 8),
             Text(
               'Grocery List',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: Colors.white,),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color: Colors.white,
+              ),
             ),
           ],
         ),
@@ -222,7 +262,10 @@ class _GroceryListState extends State<GroceryList> {
                 borderRadius: BorderRadius.circular(24.0),
               ),
               onPressed: _addItem,
-              child: const Icon(Icons.add, color: Colors.white,),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
             )
           : null,
     );
