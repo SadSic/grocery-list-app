@@ -139,7 +139,8 @@ class _NewItemPageState extends State<NewItemPage> {
                       ),
                       Row(
                         children: [
-                          Expanded(
+                          Container(
+                            width: 110,
                             child: TextFormField(
                               style: TextStyle(
                                 color: Colors.white,
@@ -200,7 +201,7 @@ class _NewItemPageState extends State<NewItemPage> {
                                           color: category.value.color,
                                           size: 20,
                                         ),
-                                        SizedBox(width: 5),
+                                        SizedBox(width: 9),
                                         Text(
                                           category.value.name,
                                           style: _selectedCategory !=
