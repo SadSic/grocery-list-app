@@ -58,7 +58,7 @@ class _GroceryListState extends State<GroceryList> {
         responseItems.add(
           GroceryItem(
             id: item.key,
-            name: item.value['name'],
+            title: item.value['name'],
             quantity: item.value['quantity'],
             category: category,
           ),
@@ -102,13 +102,14 @@ class _GroceryListState extends State<GroceryList> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${item.name} removed.'),
+        content: Text('${item.title} removed.'),
         duration: const Duration(seconds: 2),
       ),
     );
   }
 
   void _updateItem(GroceryItem item) async {
+    print(item.id);
     final updatedItem = await Navigator.of(context).push<GroceryItem>(
       MaterialPageRoute(
         builder: (context) => EditItemPage(
@@ -168,7 +169,7 @@ class _GroceryListState extends State<GroceryList> {
                   ),
                   child: ListTile(
                     title: Text(
-                      item.name,
+                      item.title,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

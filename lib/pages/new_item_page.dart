@@ -56,7 +56,7 @@ class _NewItemPageState extends State<NewItemPage> {
       Navigator.of(context).pop(
         GroceryItem(
           id: responseData['name'],
-          name: _enteredName,
+          title: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory,
         ),

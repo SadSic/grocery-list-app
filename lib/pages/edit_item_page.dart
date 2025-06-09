@@ -25,7 +25,7 @@ class _EditItemPageState extends State<EditItemPage> {
   @override
   void initState() {
     super.initState();
-    _enteredName = widget.oldItem!.name;
+    _enteredName = widget.oldItem!.title;
     _enteredQuantity = widget.oldItem!.quantity;
     _selectedCategory = widget.oldItem!.category;
 
@@ -67,13 +67,12 @@ class _EditItemPageState extends State<EditItemPage> {
 
       final responseData = json.decode(response.body);
 
-      print(response.statusCode);
       print(responseData);
 
       Navigator.of(context).pop(
         GroceryItem(
           id: responseData['name'],
-          name: _enteredName,
+          title: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory!,
         ),
