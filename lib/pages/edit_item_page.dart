@@ -28,10 +28,6 @@ class _EditItemPageState extends State<EditItemPage> {
     _enteredName = widget.oldItem!.title;
     _enteredQuantity = widget.oldItem!.quantity;
     _selectedCategory = widget.oldItem!.category;
-
-    print('Selected category: ${_selectedCategory?.name}');
-    print('Entered name: $_enteredName');
-    print('Entered quantity: $_enteredQuantity');
   }
 
   void _resetForm() {
@@ -54,7 +50,7 @@ class _EditItemPageState extends State<EditItemPage> {
         },
         body: json.encode(
           {
-            'name': _enteredName,
+            'title': _enteredName,
             'quantity': _enteredQuantity,
             'category': _selectedCategory?.name,
           },
@@ -66,12 +62,15 @@ class _EditItemPageState extends State<EditItemPage> {
       }
 
       final responseData = json.decode(response.body);
+      setState(() {
+        _isSending = false;
+      });
 
       print(responseData);
 
       Navigator.of(context).pop(
         GroceryItem(
-          id: responseData['name'],
+          id: widget.oldItem!.id,
           title: _enteredName,
           quantity: _enteredQuantity,
           category: _selectedCategory!,

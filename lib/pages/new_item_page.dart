@@ -25,42 +25,50 @@ class _NewItemPageState extends State<NewItemPage> {
   }
 
   void _addNewItem() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      FocusScope.of(context).unfocus();
-      setState(() {
-        _isSending = true;
-      });
-      final url = Uri.https('grocerylistapp-6ebd0-default-rtdb.firebaseio.com',
-          'shopping-list.json');
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(
-          {
-            'name': _enteredName,
-            'quantity': _enteredQuantity,
-            'category': _selectedCategory.name,
+    try {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        FocusScope.of(context).unfocus();
+        setState(() {
+          _isSending = true;
+        });
+        final url = Uri.https(
+            'grocerylistapp-6ebd0-default-rtdb.firebaseio.com',
+            'shopping-list.json');
+        final response = await http.post(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
           },
-        ),
-      );
+          body: json.encode(
+            {
+              'title': _enteredName,
+              'quantity': _enteredQuantity,
+              'category': _selectedCategory.name,
+            },
+          ),
+        );
 
-      if (!context.mounted) {
-        return;
+        if (!context.mounted) {
+          return;
+        }
+
+        final responseData = json.decode(response.body);
+        setState(() {
+          _isSending = false;
+        });
+
+        Navigator.of(context).pop(
+          GroceryItem(
+            id: responseData['name'],
+            title: _enteredName,
+            quantity: _enteredQuantity,
+            category: _selectedCategory,
+          ),
+        );
       }
-
-      final responseData = json.decode(response.body);
-
-      Navigator.of(context).pop(
-        GroceryItem(
-          id: responseData['name'],
-          title: _enteredName,
-          quantity: _enteredQuantity,
-          category: _selectedCategory,
-        ),
-      );
+    } catch (error) {
+      print(error);
     }
   }
 

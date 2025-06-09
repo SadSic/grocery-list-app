@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -58,7 +59,7 @@ class _GroceryListState extends State<GroceryList> {
         responseItems.add(
           GroceryItem(
             id: item.key,
-            title: item.value['name'],
+            title: item.value['title'],
             quantity: item.value['quantity'],
             category: category,
           ),
@@ -70,6 +71,7 @@ class _GroceryListState extends State<GroceryList> {
       });
     } catch (error) {
       _error = 'Something went wrong. Please try again later.';
+      throw error;
     }
   }
 
@@ -109,20 +111,27 @@ class _GroceryListState extends State<GroceryList> {
   }
 
   void _updateItem(GroceryItem item) async {
-    print(item.id);
-    final updatedItem = await Navigator.of(context).push<GroceryItem>(
-      MaterialPageRoute(
-        builder: (context) => EditItemPage(
-          oldItem: item,
+    try {
+      final updatedItem = await Navigator.of(context).push<GroceryItem>(
+        MaterialPageRoute(
+          builder: (context) => EditItemPage(
+            oldItem: item,
+          ),
         ),
-      ),
-    );
+      );
 
-    if (updatedItem == null) {
-      return;
+      if (updatedItem == null) {
+        return;
+      }
+
+      setState(() {
+        final index = _groceryItems.indexWhere((i) => i.id == item.id);
+        _groceryItems.remove(item);
+        _groceryItems.insert(index, updatedItem);
+      });
+    } catch (error) {
+      print(error);
     }
-
-    item = updatedItem;
   }
 
   @override
