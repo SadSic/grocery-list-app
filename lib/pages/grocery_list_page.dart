@@ -122,12 +122,6 @@ class _GroceryListState extends State<GroceryList> {
       return;
     }
 
-    // final index = _groceryItems.indexWhere((i) => i.id == item.id);
-    // if (index >= 0) {
-    //   setState(() {
-    //     _groceryItems[index] = updatedItem;
-    //   });
-    // }
     item = updatedItem;
   }
 
@@ -200,7 +194,35 @@ class _GroceryListState extends State<GroceryList> {
                               Icons.delete_forever,
                               color: Color.fromARGB(255, 245, 84, 56),
                             ),
-                            onPressed: () => _removeItem(item),
+                            onPressed: () => showDialog(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                title: const Text('Delete Item',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                content: Text(
+                                  'Are you sure you want to delete ${item.title}?',
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      _removeItem(item);
+                                      Navigator.of(ctx).pop();
+                                    },
+                                    child: const Text(
+                                      'Delete',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
