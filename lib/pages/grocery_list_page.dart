@@ -122,12 +122,13 @@ class _GroceryListState extends State<GroceryList> {
       return;
     }
 
-    final index = _groceryItems.indexWhere((i) => i.id == item.id);
-    if (index >= 0) {
-      setState(() {
-        _groceryItems[index] = updatedItem;
-      });
-    }
+    // final index = _groceryItems.indexWhere((i) => i.id == item.id);
+    // if (index >= 0) {
+    //   setState(() {
+    //     _groceryItems[index] = updatedItem;
+    //   });
+    // }
+    item = updatedItem;
   }
 
   @override
