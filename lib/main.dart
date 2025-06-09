@@ -13,14 +13,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Groceries',
-      theme: ThemeData.dark().copyWith(
-        useMaterial3: true,
+      theme: ThemeData(
+        fontFamily: 'Lato',
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 147, 229, 250),
-          brightness: Brightness.dark,
-          surface: const Color.fromARGB(255, 42, 51, 59),
+          seedColor: const Color(0xffffd6a5),
+          primary: const Color.fromARGB(255, 23, 144, 238),
+          secondary: const Color.fromARGB(255, 88, 209, 243),
         ),
         scaffoldBackgroundColor: const Color.fromARGB(255, 50, 58, 60),
+        useMaterial3: true,
       ),
       home: GroceryList(),
     );

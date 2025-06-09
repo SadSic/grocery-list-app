@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 enum Categories {
   vegetables,
@@ -16,6 +17,7 @@ enum Categories {
 class Category {
   final String name;
   final Color color;
+  final IconData icon;
 
-  const Category(this.name, this.color);
+  const Category(this.name, this.color, this.icon);
 }
